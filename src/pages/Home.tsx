@@ -4,9 +4,10 @@ import NewNoteCard from "../components/NewNoteCard";
 import NoteCard from "../components/NoteCard";
 
 export type Todo = {
+  id:number;
   title: string;
   description: string;
-  id:number
+  tasks?: {uid:number, taskString:string}[]
 };
 
 const Home = () => {
@@ -33,6 +34,7 @@ const Home = () => {
     setTitle("")
     setDescription("")
   }
+  
   return (
     <HStack spacing={10} mt={10} flexWrap='wrap' justifyContent='center' >
       <NewNoteCard setTitle={setTitle} setDescription={setDescription} handleAddNote={handleAddNote} title={title} description={description} />

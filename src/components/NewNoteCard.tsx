@@ -58,7 +58,7 @@ const NewNoteCard:React.FC<NewNoteCardProps> = ({setDescription, setTitle, handl
               
             }}
           >
-            Add Note
+            Create Todo
           </Button>
         </CardBody>
       </VStack>

@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { render } from '@testing-library/react';
+import CheckList from "./CheckList";
 
 export type TodoProps = {
   title: string;
@@ -27,11 +28,11 @@ const NoteCard: React.FC<TodoProps> = ({ description, title, id, onEdit, onDelet
   //   "Make this card functional and make it more beautiful"
   // );
   return (
-    <Card shadow="xl"borderColor={"purple.300"} borderRadius={15}  borderWidth={4} boxSize="300">
+    <Card shadow="xl" borderColor={"purple.300"} borderWidth={2} borderRadius={15}  width={400}>
       <Box>
         <HStack>
           <CardHeader>
-            <Heading size="md" alignSelf="flex-start">
+            <Heading fontFamily={'cursive'} size="md" alignSelf="flex-start">
               {title}
             </Heading>
           </CardHeader>
@@ -56,14 +57,18 @@ const NoteCard: React.FC<TodoProps> = ({ description, title, id, onEdit, onDelet
       <VStack spacing={2} justifyContent="flex-start" p={5}>
         {/* render description only if description string is not empty */}
         if (description){
-          <Text fontSize="medium" alignSelf='flex-start' flexWrap="wrap">{description}</Text>
+          <Text fontFamily={"cursive"} fontSize="medium" alignSelf='flex-start' flexWrap="wrap">{description}</Text>
         }
+      <CheckList id={id} uid={1} taskString="test label" />
+      <CheckList id={id} uid={1} taskString="test label" />
+      <CheckList id={id} uid={1} taskString="test label" />
+      
         <IconButton
           aria-label="Search database"
           icon={<DeleteIcon />}
           alignSelf="flex-end"
-          pos="absolute"
-          bottom="4"
+          // pos="absolute"
+          // bottom="4"
           rounded="full"
           bg="red.400"
           _hover={{bg: "red.500"}}
