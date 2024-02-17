@@ -5,7 +5,7 @@ import RootRouter from "./router/RootRouter";
 function App() {
   return (
     <Fragment>
-      <Navbar />
+      {/* <Navbar /> */}
       <RootRouter />
     </Fragment>
   );

@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 
-const generateUid = () => {
+const generateUid = ():string => {
   return uuidv4();
 }
 

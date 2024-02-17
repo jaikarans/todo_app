@@ -11,28 +11,49 @@ import {
   Tooltip,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
-import { render } from '@testing-library/react';
+import React, { useState } from "react";
 import CheckList from "./CheckList";
+import { Todo } from "../pages/Home";
+import NewCheckList from "./NewCheckList";
 
 export type TodoProps = {
+  handleSetTodoList: (callback: (prev: Todo[]) => Todo[]) => void;
   title: string;
   description: string;
-  id: number;
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  id: string;
+  todoList: Todo[];
 };
-const NoteCard: React.FC<TodoProps> = ({ description, title, id, onEdit, onDelete }) => {
-  // const [title, setTitle] = useState("Design an Card for ToDo app");
-  // const [description, setDescription] = useState(
-  //   "Make this card functional and make it more beautiful"
-  // );
+
+const NoteCard: React.FC<TodoProps> = ({
+  handleSetTodoList,
+  description,
+  title,
+  id,
+  todoList,
+}) => {
+  const [renderNoteCard, setRenderNoteCard] = useState<string>("render");
+  const [enableEdit, setEnableEdit] = useState<boolean>(false);
+
+  console.log("NoteCard is rendered", renderNoteCard, " ", todoList);
+
+  const onDelete = (id: string) => {
+    const newArray = todoList?.filter((todo) => todo.id !== id);
+    handleSetTodoList(() => newArray);
+  };
+
   return (
-    <Card shadow="xl" borderColor={"purple.300"} borderWidth={2} borderRadius={15}  width={400}>
+    <Card
+      shadow="xl"
+      borderColor={"purple.300"}
+      borderWidth={2}
+      borderRadius={15}
+      width={400}
+      mx="2"
+    >
       <Box>
         <HStack>
           <CardHeader>
-            <Heading fontFamily={'cursive'} size="md" alignSelf="flex-start">
+            <Heading fontFamily={"cursive"} size="md" alignSelf="flex-start">
               {title}
             </Heading>
           </CardHeader>
@@ -48,30 +69,53 @@ const NoteCard: React.FC<TodoProps> = ({ description, title, id, onEdit, onDelet
               icon={<EditIcon />}
               alignSelf="flex-end"
               rounded="full"
-              onClick={()=>onEdit(id)}
+              onClick={() => setEnableEdit(!enableEdit)}
             />
           </Tooltip>
         </HStack>
         <Divider size="md" />
       </Box>
-      <VStack spacing={2} justifyContent="flex-start" p={5}>
+      <VStack spacing={2} p={5}>
         {/* render description only if description string is not empty */}
-        if (description){
-          <Text fontFamily={"cursive"} fontSize="medium" alignSelf='flex-start' flexWrap="wrap">{description}</Text>
-        }
-      <CheckList id={id} uid={1} taskString="test label" />
-      <CheckList id={id} uid={1} taskString="test label" />
-      <CheckList id={id} uid={1} taskString="test label" />
-      
+        description && (
+        <Text
+          fontFamily={"cursive"}
+          fontSize="medium"
+          alignSelf="flex-start"
+          flexWrap="wrap"
+        >
+          {description}
+        </Text>
+        )
+        {todoList
+          ?.find((todo) => todo.id === id)
+          ?.tasks?.map((tsk) => (
+            <CheckList
+              key={tsk.uid}
+              todoList={todoList}
+              handleSetTodoList={handleSetTodoList}
+              id={id}
+              _uid={tsk.uid}
+              _taskString={tsk.taskString}
+              _isChecked={tsk.isChecked}
+              setRenderNoteCard={setRenderNoteCard}
+            />
+          ))}
+        {enableEdit && (
+          <NewCheckList
+            todoList={todoList}
+            handleSetTodoList={handleSetTodoList}
+            id={id}
+            setRenderNoteCard={setRenderNoteCard}
+          />
+        )}
         <IconButton
           aria-label="Search database"
           icon={<DeleteIcon />}
           alignSelf="flex-end"
-          // pos="absolute"
-          // bottom="4"
           rounded="full"
           bg="red.400"
-          _hover={{bg: "red.500"}}
+          _hover={{ bg: "red.500" }}
           onClick={() => onDelete(id)}
         />
       </VStack>

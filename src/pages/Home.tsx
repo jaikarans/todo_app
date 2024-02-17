@@ -1,45 +1,42 @@
-import { HStack, VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { HStack } from "@chakra-ui/react";
+import { useState } from "react";
 import NewNoteCard from "../components/NewNoteCard";
 import NoteCard from "../components/NoteCard";
 
 export type Todo = {
-  id:number;
+  id: string;
   title: string;
   description: string;
-  tasks?: {uid:number, taskString:string}[]
+  tasks?: Task[];
+};
+
+export type Task = {
+  uid: string;
+  taskString: string;
+  isChecked: boolean;
 };
 
 const Home = () => {
+  const [todoList, setTodoList] = useState<Todo[]>([]);
 
-  // const [x, setX] = useState<string | Boolean>()
+  console.log("Home is rendered", todoList);
 
-  const [id, setId] = useState<number>(-1)
-  const [todoList, setTodoList] = useState<Todo[]>([])
-  const [title, setTitle] = useState<string>()
-  const [description, setDescription] = useState<string>()
-  
-  const onEdit = (id:number) => {
-    console.log(id)
-  }
+  const handleSetTodoList = (callback: (prev: Todo[]) => Todo[]) => {
+    setTodoList((prevtodo) => callback(prevtodo));
+  };
 
-  const onDelete = (id:number) => {
-    const newArray = todoList?.filter((todo) => (todo.id !== id))
-    setTodoList(newArray)
-  }
-
-  const handleAddNote = () => {
-    setId(id+1)
-    setTodoList(prev=> [...prev, {title, description, id} as Todo])
-    setTitle("")
-    setDescription("")
-  }
-  
   return (
-    <HStack spacing={10} mt={10} flexWrap='wrap' justifyContent='center' >
-      <NewNoteCard setTitle={setTitle} setDescription={setDescription} handleAddNote={handleAddNote} title={title} description={description} />
+    <HStack spacing={10} mt={10} flexWrap="wrap" justifyContent="center">
+      <NewNoteCard todoList={todoList} handleSetTodoList={handleSetTodoList} />
       {todoList?.map((todo) => (
-        <NoteCard key={todo.id} title={todo.title} description={todo.description} id={todo.id} onEdit={onEdit} onDelete={onDelete}  />
+        <NoteCard
+          handleSetTodoList={handleSetTodoList}
+          key={todo.id}
+          title={todo.title}
+          description={todo.description}
+          id={todo.id}
+          todoList={todoList}
+        />
       ))}
     </HStack>
   );
