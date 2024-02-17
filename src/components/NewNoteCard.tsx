@@ -1,62 +1,97 @@
-import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons';
-import { Card, VStack, StackDivider, HStack, CardHeader, Heading, Tooltip, Button, CardBody, Text, Input, IconButton, Textarea, Toast, useToast } from '@chakra-ui/react';
-import React, { useState } from 'react'
-import { Todo } from '../pages/Home';
-import { TodoProps } from './NoteCard';
+import {
+  Card,
+  VStack,
+  StackDivider,
+  HStack,
+  CardHeader,
+  Button,
+  CardBody,
+  Input,
+  Textarea,
+  useToast,
+} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Task, Todo } from "../pages/Home";
+import generateUid from "../utils/idGenerator";
 
 type NewNoteCardProps = {
-  setDescription:React.Dispatch<React.SetStateAction<string | undefined>>
-  setTitle: React.Dispatch<React.SetStateAction<string | undefined>>
-  handleAddNote:() => void
-  title: string | undefined
-  description: string | undefined
-}
+  todoList: Todo[];
+  handleSetTodoList: (callback: (prev: Todo[]) => Todo[]) => void;
+};
 
-const NewNoteCard:React.FC<NewNoteCardProps> = ({setDescription, setTitle, handleAddNote, title, description})=> {
-  const [titleInputBoxColor, setTitleInputBoxColor] = useState<string>('grey');
-  const [titleInputBoxWidth, setTitleInputBoxWidth] = useState<number>()
-  const toast = useToast()
+const NewNoteCard: React.FC<NewNoteCardProps> = ({
+  todoList,
+  handleSetTodoList,
+}) => {
+  const [titleInputBoxColor, setTitleInputBoxColor] = useState<string>("grey");
+  const [titleInputBoxWidth, setTitleInputBoxWidth] = useState<number>();
+  const toast = useToast();
+
+  const [id, setId] = useState<string>(generateUid);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>();
+
+  console.log("NewNoteCard is rendered");
+
+  const handleCreateTodo = () => {
+    if (!title) {
+      setTitleInputBoxColor("red");
+      setTitleInputBoxWidth(3);
+      toast({
+        title: "Title can not be empty!!",
+        status: "error",
+        isClosable: true,
+      });
+    } else {
+      setTitleInputBoxColor("grey");
+      setTitleInputBoxWidth(1);
+      handleSetTodoList((prev: Todo[]) => [
+        ...prev,
+        { id, title, description, tasks } as Todo,
+      ]);
+      setId(generateUid());
+      setTasks([]);
+      setTitle("");
+      setDescription("");
+      console.log("inside handleCreateTodo ", todoList);
+    }
+  };
 
   return (
-    <Card shadow="dark-lg" mx='2' boxSize="300" >
+    <Card
+      shadow="xl"
+      borderColor={"purple.300"}
+      borderWidth={2}
+      borderRadius={15}
+      width={400}
+      mx="2"
+    >
       <VStack alignItems="flex-start" divider={<StackDivider />}>
         <HStack>
           <CardHeader>
-            <Input borderColor={titleInputBoxColor} borderWidth={titleInputBoxWidth} onChange={(e) => setTitle(e.target.value)} placeholder='Title' value={title}/>
+            <Input
+              isRequired={true}
+              borderColor={titleInputBoxColor}
+              borderWidth={titleInputBoxWidth}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Title"
+              value={title}
+            />
           </CardHeader>
-          <Tooltip hasArrow label='Create a new Todo List'>
-          <IconButton aria-label='Search database'
-            variant="solid"
-            bg="purple.400"
-            pos="absolute"
-            top="-4"
-            right="-4"
-            _hover={{bg:"purple.500"}}
-            icon={<AddIcon />} alignSelf="flex-end" 
-            rounded="full"
-          />
-          </Tooltip>
         </HStack>
         <CardBody>
-        <Input onChange={(e) => setDescription(e.target.value)} placeholder='Description'  as={Textarea} value={description}/>
+          <Input
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Description (optional)"
+            as={Textarea}
+            value={description}
+          />
           <Button
             mt="2"
             bg="blue.400"
-            _hover={{bg: "blue.500"}}
-            onClick={() => {
-              // if title string is empty them does not save the todo list
-              if(!title) {
-                setTitleInputBoxColor('red')
-                setTitleInputBoxWidth(3)
-                toast({title: 'Title can not be empty!!', status:'error', isClosable: true})
-
-              } else {
-                handleAddNote()
-                setTitleInputBoxColor('grey')
-                setTitleInputBoxWidth(1)
-              }
-              
-            }}
+            _hover={{ bg: "blue.500" }}
+            onClick={handleCreateTodo}
           >
             Create Todo
           </Button>
@@ -64,6 +99,6 @@ const NewNoteCard:React.FC<NewNoteCardProps> = ({setDescription, setTitle, handl
       </VStack>
     </Card>
   );
-}
+};
 
-export default NewNoteCard
+export default NewNoteCard;
