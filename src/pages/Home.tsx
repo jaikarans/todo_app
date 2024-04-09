@@ -16,8 +16,18 @@ export type Task = {
   isChecked: boolean;
 };
 
+const getTodoFromLocal = () => {
+  const todoString = localStorage.getItem('todoList');
+  if(todoString) {
+    return JSON.parse(todoString) as Todo[];
+  } else {
+    return [];
+  }
+}
+
 const Home = () => {
-  const [todoList, setTodoList] = useState<Todo[]>([]);
+
+  const [todoList, setTodoList] = useState<Todo[]>(getTodoFromLocal());
 
   console.log("Home is rendered", todoList);
 

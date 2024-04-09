@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Task, Todo } from "../pages/Home";
 import generateUid from "../utils/idGenerator";
+import saveTodoListToLocalStorage from "../utils/saveLocalStorage";
 
 type CheckListProps = {
   todoList: Todo[];
@@ -56,6 +57,7 @@ const CheckList: React.FC<CheckListProps> = ({
       console.log(todoList);
     }
     handleSetTodoList(() => _todo);
+    saveTodoListToLocalStorage(_todo);
   };
 
   const checkUncheckTheTask = (
@@ -71,6 +73,7 @@ const CheckList: React.FC<CheckListProps> = ({
       task.isChecked = isChecked;
     }
     handleSetTodoList(() => _todo);
+    saveTodoListToLocalStorage(_todo);
     console.log("end checkuncheck", todoList);
   };
 
@@ -112,6 +115,7 @@ const CheckList: React.FC<CheckListProps> = ({
     }
     setRenderNoteCard(generateUid());
     console.log("delete Task : todoList = ", todoList);
+    saveTodoListToLocalStorage(todoList);
     console.log("delete Task : tasks = ", tasks);
   };
 

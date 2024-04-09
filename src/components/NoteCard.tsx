@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import CheckList from "./CheckList";
 import { Todo } from "../pages/Home";
 import NewCheckList from "./NewCheckList";
+import saveTodoListToLocalStorage from "../utils/saveLocalStorage";
 
 export type TodoProps = {
   handleSetTodoList: (callback: (prev: Todo[]) => Todo[]) => void;
@@ -39,6 +40,7 @@ const NoteCard: React.FC<TodoProps> = ({
   const onDelete = (id: string) => {
     const newArray = todoList?.filter((todo) => todo.id !== id);
     handleSetTodoList(() => newArray);
+    saveTodoListToLocalStorage(newArray);
   };
 
   return (

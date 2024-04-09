@@ -13,6 +13,7 @@ import {
 import React, { useState } from "react";
 import { Task, Todo } from "../pages/Home";
 import generateUid from "../utils/idGenerator";
+import saveTodoListToLocalStorage from "../utils/saveLocalStorage";
 
 type NewNoteCardProps = {
   todoList: Todo[];
@@ -50,12 +51,24 @@ const NewNoteCard: React.FC<NewNoteCardProps> = ({
         ...prev,
         { id, title, description, tasks } as Todo,
       ]);
+      // handleSetTodoList((prev: Todo[]) => {
+      //   const updatedTodoList = [
+      //     ...prev,
+      //     { id, title, description, tasks } as Todo,
+      //   ];
+      
+      //   // Call saveTodoListToLocalStorage method after updating the todo list
+      //   saveTodoListToLocalStorage(updatedTodoList);
+      
+      //   return updatedTodoList;
+      // });
       setId(generateUid());
       setTasks([]);
       setTitle("");
       setDescription("");
       console.log("inside handleCreateTodo ", todoList);
     }
+    saveTodoListToLocalStorage(todoList);
   };
 
   return (

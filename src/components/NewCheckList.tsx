@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { Task, Todo } from "../pages/Home";
 import generateUid from "../utils/idGenerator";
+import saveTodoListToLocalStorage from "../utils/saveLocalStorage";
 
 type NewCheckListProps = {
   todoList: Todo[];
@@ -52,6 +53,7 @@ const NewCheckList: React.FC<NewCheckListProps> = ({
     setTaskString("");
     setIsChecked(false);
     setRenderNoteCard(generateUid());
+    saveTodoListToLocalStorage(_todo);
   };
 
   const ErrorToast = () => {
