@@ -2,6 +2,7 @@ import { HStack } from "@chakra-ui/react";
 import { useState } from "react";
 import NewNoteCard from "../components/NewNoteCard";
 import NoteCard from "../components/NoteCard";
+import loadSampleData from "../utils/sampledata";
 
 export type Todo = {
   id: string;
@@ -21,7 +22,7 @@ const getTodoFromLocal = () => {
   if(todoString) {
     return JSON.parse(todoString) as Todo[];
   } else {
-    return [];
+    return loadSampleData()
   }
 }
 
