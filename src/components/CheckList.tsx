@@ -32,12 +32,12 @@ const CheckList: React.FC<CheckListProps> = ({
   setRenderNoteCard,
 }) => {
   console.log("CheckList is rendering", todoList);
-  const [bodyBg, setBodyBg] = useState<string>("BlackAlpha.200");
-  const [lineThroughText, setLineThroughText] = useState<string>("none");
   const [editTextDisable, setEditTextDisable] = useState<boolean>(false);
   const [uid, setUid] = useState<string>(_uid);
   const [taskString, setTaskString] = useState<string>(_taskString);
   const [isChecked, setIsChecked] = useState<boolean>(_isChecked);
+  const [lineThroughText, setLineThroughText] = useState<string>(_isChecked ? "line-through" : "none");
+  const [bodyBg, setBodyBg] = useState<string>(_isChecked ? "green.100" : "BlackAlpha.200");
 
   const addTask = (id: string, uid: string, taskString: string): void => {
     const newTaskToAdd: Task = { uid, taskString, isChecked: false };
